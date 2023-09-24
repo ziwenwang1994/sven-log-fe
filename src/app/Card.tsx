@@ -3,25 +3,23 @@
 import { useCallback, useEffect, useState } from "react";
 
 interface CardProps {
-  left: number;
-  top: number;
-  cardId: string;
+  cardData: CardData;
   setTarget: (cardId: string)=>any;
 }
 
 export default function Card({
-  top, left, cardId, setTarget
+  cardData, setTarget
 }: CardProps) {
 
   return (
     <div
       className="min-h-[200px] w-[200px] bg-amber-100 p-[16px] drop-shadow-lg absolute text-black"
       style={{
-        top, left
+        top: cardData.pos[1], left: cardData.pos[0]
       }}
       onMouseDown={(e: React.MouseEvent)=>{
-        setTarget(cardId);
+        setTarget(cardData.cardId);
       }}
-    >{cardId}</div>
+    >{cardData.content}</div>
   );
 }
