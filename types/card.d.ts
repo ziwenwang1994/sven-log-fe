@@ -1,4 +1,4 @@
-declare interface CardData  {
+declare interface CardData {
     cardId: string;
     pos: [number, number],
     title?: string;

@@ -1,4 +1,4 @@
-export const cardList:CardDataList = {
+export const cardList: CardDataList = {
     "card_1": {
         cardId: "card_1",
         pos: [0, 0],
