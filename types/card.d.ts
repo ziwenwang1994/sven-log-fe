@@ -1,14 +1,12 @@
-declare interface CardData {
-    cardId: string;
-    pos: [number, number],
-    title?: string;
-    content?: string;
-}
+declare type CardData = {
+  cardId: string;
+  pos: [number, number];
+  title?: string;
+  content?: string;
+};
 
-declare interface CardDataList {
-    [cardId: string]: CardData;
-}
+declare type CardDataList = CardData[];
 
 declare interface CardPosition {
-    [cardId: string]: [number, number]
+  [cardId: string]: [number, number];
 }
