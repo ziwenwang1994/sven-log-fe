@@ -1,45 +1,56 @@
 "use client";
-import { cardList } from "../../mock/cardList";
-import Card from "./Card";
+import Navigation from "@/components/Navigation";
+import Card from "@/components/Card";
 import { useCallback, useEffect, useState } from "react";
+import { useAppSelector } from "@/store/hooks";
 
 export default function Home() {
+  const cardList = useAppSelector((state) => state.cardReducer.cards);
   const [cardData, setCardData] = useState<CardDataList>(cardList);
   const [target, setTarget] = useState("");
   const [Cards, setCards] = useState(<div></div>);
+  const [currentCard, setCurrentCard] = useState<CardData>();
   const mouseUp = (e: React.MouseEvent) => {
     setTarget("");
   };
   const mouseMove = useCallback(
     (e: React.MouseEvent) => {
-      if (target) {
-        cardData[target].pos[0] += e.movementX;
-        cardData[target].pos[1] += e.movementY;
+      if (target && currentCard) {
+        currentCard.pos[0] += e.movementX;
+        currentCard.pos[1] += e.movementY;
         setCardData({ ...cardData });
       }
     },
-    [target, cardData]
+    [cardData, currentCard, target]
   );
+
+  useEffect(() => {
+    setCurrentCard(cardData.find((el) => el.cardId === target));
+  }, [target, cardData]);
 
   useEffect(() => {
     setCards(
       <div>
-        {Object.keys(cardData).map((cardId) => {
-          const card = cardList[cardId];
-          return <Card key={cardId} cardData={card} setTarget={setTarget} />;
+        {cardList.map((card) => {
+          return (
+            <Card key={card.cardId} cardData={card} setTarget={setTarget} />
+          );
         })}
       </div>
     );
-  }, [cardData]);
+  }, [cardData, cardList, cardList.length]);
 
   return (
-    <main
-      className="flex h-full flex-col items-center justify-between bg-stone-100 relative"
-      onMouseMove={mouseMove}
-      onMouseUp={mouseUp}
-      onMouseLeave={mouseUp}
-    >
-      {Cards}
-    </main>
+    <>
+      <Navigation />
+      <main
+        className="flex h-full flex-col items-center justify-between bg-stone-100 relative"
+        onMouseMove={mouseMove}
+        onMouseUp={mouseUp}
+        onMouseLeave={mouseUp}
+      >
+        {Cards}
+      </main>
+    </>
   );
 }
