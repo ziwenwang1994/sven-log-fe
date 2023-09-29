@@ -5,9 +5,18 @@ type CardState = {
   cards: CardDataList;
 };
 
+type CardPositionState = {
+  cardId: string;
+  pos: [number, number];
+}
+
 const initialState = {
-  cards: cardList,
+  cards: [...cardList],
 } as CardState;
+
+type CardPositionAction = {
+  payload: CardPositionState;
+}
 
 export const card = createSlice({
   name: "counter",
@@ -22,8 +31,14 @@ export const card = createSlice({
     addCard: (state, { payload: CardData }) => {
       state.cards.push(CardData);
     },
+    setCardPosition: (state, action: CardPositionAction) => {
+      const card = state.cards.find(el => el.cardId === action.payload.cardId);
+      if (card) {
+        card.pos = action.payload.pos;
+      }
+    },
   },
 });
 
-export const { reset, addCard, setCards } = card.actions;
+export const { reset, addCard, setCards, setCardPosition } = card.actions;
 export default card.reducer;

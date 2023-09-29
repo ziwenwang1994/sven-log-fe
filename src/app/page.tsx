@@ -2,11 +2,12 @@
 import Navigation from "@/components/Navigation";
 import Card from "@/components/Card";
 import { useCallback, useEffect, useState } from "react";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setCardPosition } from "@/store/cardSlice";
 
 export default function Home() {
   const cardList = useAppSelector((state) => state.cardReducer.cards);
-  const [cardData, setCardData] = useState<CardDataList>(cardList);
+  const dispatch = useAppDispatch();
   const [target, setTarget] = useState("");
   const [Cards, setCards] = useState(<div></div>);
   const [currentCard, setCurrentCard] = useState<CardData>();
@@ -16,17 +17,23 @@ export default function Home() {
   const mouseMove = useCallback(
     (e: React.MouseEvent) => {
       if (target && currentCard) {
-        currentCard.pos[0] += e.movementX;
-        currentCard.pos[1] += e.movementY;
-        setCardData({ ...cardData });
+        dispatch(
+          setCardPosition({
+            cardId: target,
+            pos: [
+              currentCard.pos[0] + e.movementX,
+              currentCard.pos[1] + e.movementY,
+            ],
+          })
+        );
       }
     },
-    [cardData, currentCard, target]
+    [currentCard, dispatch, target]
   );
 
   useEffect(() => {
-    setCurrentCard(cardData.find((el) => el.cardId === target));
-  }, [target, cardData]);
+    if (cardList) setCurrentCard(cardList.find((el) => el.cardId === target));
+  }, [cardList, target]);
 
   useEffect(() => {
     setCards(
@@ -38,7 +45,7 @@ export default function Home() {
         })}
       </div>
     );
-  }, [cardData, cardList, cardList.length]);
+  }, [cardList, cardList.length]);
 
   return (
     <>
