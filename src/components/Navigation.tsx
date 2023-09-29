@@ -13,9 +13,9 @@ export default function Navigation() {
     dispatch(addCard(note));
   };
   return (
-    <nav className="h-[120px] w-full bg-black overflow-hidden flex">
+    <nav className="h-[120px] w-full bg-black overflow-hidden flex relative z-10">
       <div
-        className="text-white p-[4px] m-[8px] bg-green-700 h-[32px]"
+        className="text-white py-[4px] px-[6px] m-[8px] bg-green-700 h-[32px] rounded cursor-pointer"
         onClick={addNote}
       >
         Add note

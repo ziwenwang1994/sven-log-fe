@@ -1,5 +1,7 @@
 "use client";
 
+import { setCardContent } from "@/store/cardSlice";
+import { useAppDispatch } from "@/store/hooks";
 import { useCallback, useEffect, useState } from "react";
 
 interface CardProps {
@@ -8,11 +10,22 @@ interface CardProps {
 }
 
 export default function Card({ cardData, setTarget }: CardProps) {
+  const dispath = useAppDispatch();
   const [title, setTitle] = useState(cardData.title || "");
   const [content, setContent] = useState(cardData.content || "");
+
+  useEffect(() => {
+    dispath(
+      setCardContent({
+        cardId: cardData.cardId,
+        content,
+        title,
+      })
+    );
+  }, [title, content, dispath, cardData.cardId]);
   return (
     <div
-      className="min-h-[200px] w-[200px] bg-amber-100 p-[16px] drop-shadow-lg absolute text-black"
+      className="min-h-[320px] w-[320px] bg-amber-100 p-[16px] drop-shadow-lg absolute text-black"
       style={{
         top: cardData.pos[1],
         left: cardData.pos[0],
@@ -22,7 +35,7 @@ export default function Card({ cardData, setTarget }: CardProps) {
       }}
     >
       <h3
-        className="bg-transparent w-full resize-none break-words font-black whitespace-pre-line p-[4px] outline-light"
+        className="bg-transparent w-full resize-none break-words font-black whitespace-pre-line p-[4px] outline-light text-[18px]"
         contentEditable
         suppressContentEditableWarning
         onBlur={(e: React.FormEvent) => {
@@ -33,7 +46,7 @@ export default function Card({ cardData, setTarget }: CardProps) {
         {title}
       </h3>
       <div
-        className="bg-transparent w-full resize-none min-h-[150px] break-words whitespace-pre-line p-[4px] outline-light"
+        className="bg-transparent w-full resize-none min-h-[150px] break-words whitespace-pre-line p-[4px] outline-light  text-[14px]"
         contentEditable
         suppressContentEditableWarning
         onBlur={(e: React.FormEvent) => {

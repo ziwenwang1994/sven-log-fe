@@ -6,7 +6,3 @@ declare type CardData = {
 };
 
 declare type CardDataList = CardData[];
-
-declare interface CardPosition {
-  [cardId: string]: [number, number];
-}

@@ -4,6 +4,7 @@ import Card from "@/components/Card";
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCardPosition } from "@/store/cardSlice";
+import store from "store2";
 
 export default function Home() {
   const cardList = useAppSelector((state) => state.cardReducer.cards);
@@ -13,6 +14,7 @@ export default function Home() {
   const [currentCard, setCurrentCard] = useState<CardData>();
   const mouseUp = (e: React.MouseEvent) => {
     setTarget("");
+    store("cardList", cardList);
   };
   const mouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -21,8 +23,12 @@ export default function Home() {
           setCardPosition({
             cardId: target,
             pos: [
-              currentCard.pos[0] + e.movementX,
-              currentCard.pos[1] + e.movementY,
+              currentCard.pos[0] + e.movementX <= 0
+                ? 0
+                : currentCard.pos[0] + e.movementX,
+              currentCard.pos[1] + e.movementY <= 0
+                ? 0
+                : currentCard.pos[1] + e.movementY,
             ],
           })
         );
